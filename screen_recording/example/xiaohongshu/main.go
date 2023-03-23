@@ -22,7 +22,7 @@ func main() {
 	// 禁用chrome headless
 	opts := append(chromedp.DefaultExecAllocatorOptions[:],
 		chromedp.Flag("headless", false),
-		chromedp.Flag("window-position", "2500,0"),
+		chromedp.Flag("window-position", "0,0"),
 	)
 	allocCtx, cancel := chromedp.NewExecAllocator(context.Background(), opts...)
 	defer cancel()
