@@ -63,8 +63,10 @@ func main() {
 	log.Printf("run 1")
 	err = chromedp.Run(ctx, chromedp.Tasks{
 		chromedp.Navigate("https://www.douyin.com/"),
-		chromedp.WaitVisible(`//*[@id="douyin-right-container"]//xg-controls/xg-inner-controls/xg-left-grid//xg-icon[@class="xgplayer-play"][@data-state="pause"]`),
-		chromedp.Click(`//*[@id="douyin-right-container"]//xg-controls/xg-inner-controls/xg-left-grid//xg-icon[@class="xgplayer-play"][@data-state="pause"]`),
+		// 设置mask隐藏
+		chromedp.Evaluate(`localStorage.setItem("douyin_web_hide_guide",1)`, nil),
+		//chromedp.WaitVisible(`//*[@id="douyin-right-container"]//xg-controls/xg-inner-controls/xg-left-grid//xg-icon[@class="xgplayer-play"][@data-state="pause"]`),
+		//chromedp.Click(`//*[@id="douyin-right-container"]//xg-controls/xg-inner-controls/xg-left-grid//xg-icon[@class="xgplayer-play"][@data-state="pause"]`),
 		chromedp.ActionFunc(func(ctx context.Context) error {
 			log.Printf("play now !!!")
 			return nil
