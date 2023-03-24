@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/json"
@@ -55,6 +56,11 @@ func main() {
 		outputFile,
 	)
 	cmd.Stdin = r
+	var stdErr bytes.Buffer
+	cmd.Stderr = &stdErr
+
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
 
 	err = cmd.Start()
 	if err != nil {
@@ -124,11 +130,11 @@ func main() {
 	err = chromedp.Run(ctx, chromedp.Tasks{
 		chromedp.Navigate("https://www.xiaohongshu.com/explore/640734780000000013032117"),
 		// 等待播放按钮出现
-		chromedp.WaitVisible(`//*[@id="videoPlayer"]/xg-start/div[@class="xgplayer-icon-play"]`),
+		// chromedp.WaitVisible(`//*[@id="videoPlayer"]/xg-start/div[@class="xgplayer-icon-play"]`),
 		// 点击播放按钮
-		chromedp.Click(`//*[@id="videoPlayer"]/xg-start/div[@class="xgplayer-icon-play"]`),
+		// chromedp.Click(`//*[@id="videoPlayer"]/xg-start/div[@class="xgplayer-icon-play"]`),
 		// 等待loading消失
-		chromedp.WaitNotVisible(`//*[@id="videoPlayer"]/xg-loading`),
+		// chromedp.WaitNotVisible(`//*[@id="videoPlayer"]/xg-loading`),
 		// 保证进度条是始终出现
 		//chromedp.Evaluate(`
 		//function x(xpath) {
@@ -154,7 +160,7 @@ func main() {
 			log.Printf("close succ")
 			err := cmd.Wait()
 			if err != nil {
-				log.Printf("wait err %v", err)
+				log.Printf("wait err %v %v", err, fmt.Sprintf("msg %v", stdErr.String()))
 				return err
 			}
 			log.Printf("cmd end")
