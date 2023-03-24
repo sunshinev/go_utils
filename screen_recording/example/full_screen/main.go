@@ -63,13 +63,12 @@ func main() {
 	log.Printf("run 1")
 	err = chromedp.Run(ctx, chromedp.Tasks{
 		chromedp.Navigate("https://www.douyin.com/"),
-		// 设置mask隐藏
-		chromedp.Evaluate(`localStorage.setItem("douyin_web_hide_guide",1)`, nil),
-		// 如果登录窗口出现，点击关闭
-		chromedp.WaitVisible(`//*[@id="login-pannel"]`),
-		chromedp.Click(`//*[@id="login-pannel"]//div[@class='dy-account-close']`),
-		// 判断是否开始播放
-		chromedp.WaitVisible(`//*[@id="sliderVideo"]//xg-controls/xg-inner-controls/xg-left-grid//xg-icon[@class="xgplayer-play"][@data-state="play"]`),
+		chromedp.WaitVisible(`//*[@id="douyin-right-container"]//xg-controls/xg-inner-controls/xg-left-grid//xg-icon[@class="xgplayer-play"][@data-state="pause"]`),
+		chromedp.Click(`//*[@id="douyin-right-container"]//xg-controls/xg-inner-controls/xg-left-grid//xg-icon[@class="xgplayer-play"][@data-state="pause"]`),
+		chromedp.ActionFunc(func(ctx context.Context) error {
+			log.Printf("play now !!!")
+			return nil
+		}),
 		// 开始录制
 		chromedp.ActionFunc(func(ctx context.Context) error {
 			err = cmd.Start()
