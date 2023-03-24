@@ -57,10 +57,9 @@ func main() {
 	)
 	cmd.Stdin = r
 	var stdErr bytes.Buffer
+	var stdOut bytes.Buffer
 	cmd.Stderr = &stdErr
-
-	var stderr bytes.Buffer
-	cmd.Stderr = &stderr
+	cmd.Stdout = &stdOut
 
 	err = cmd.Start()
 	if err != nil {
@@ -160,13 +159,15 @@ func main() {
 			log.Printf("close succ")
 			err := cmd.Wait()
 			if err != nil {
-				log.Printf("wait err %v %v", err, fmt.Sprintf("msg %v", stdErr.String()))
+				log.Printf("wait err %v : %v", err, stdErr.String())
 				return err
 			}
 			log.Printf("cmd end")
 			return nil
 		}),
 	})
+
+	log.Printf("out is %v", stdOut.String())
 
 	if err != nil {
 		log.Fatalf("run err %v", err)
