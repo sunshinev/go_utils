@@ -20,6 +20,7 @@ func main() {
 		chromedp.Flag("window-position", "0,0"),
 		chromedp.Flag("no-sandbox", true),
 		chromedp.Flag("window-size", "1920,1080"),
+		chromedp.Flag("mute-audio", false),
 	)
 	allocCtx, cancel := chromedp.NewExecAllocator(context.Background(), opts...)
 	defer cancel()
@@ -54,7 +55,7 @@ func main() {
 	}
 
 	// Build the ffmpeg command.
-	cmd := exec.Command("ffmpeg -video_size 1920x1080 -framerate 25 -f x11grab -i :0.0+0,00 -t 10 output.mp4")
+	cmd := exec.Command("bash -c ffmpeg -f x11grab -video_size 1920x1080 -framerate 30 -i :0.0+0,0 -f pulse -i Virtual_Output_Device.monitor -c:v libx264 -preset ultrafast -c:a aac -b:a 128k -t 10 output.mp4\n")
 	var stdErr bytes.Buffer
 	var stdOut bytes.Buffer
 	cmd.Stderr = &stdErr
